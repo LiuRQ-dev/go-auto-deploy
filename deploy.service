@@ -1,0 +1,46 @@
+[Unit]
+Description=Go Auto Deploy System
+Documentation=https://github.com/your-username/go-auto-deploy
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=deploy
+Group=deploy
+WorkingDirectory=/opt/go-auto-deploy
+ExecStart=/usr/local/bin/go-auto-deploy -config /opt/go-auto-deploy/config.yaml
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=mixed
+KillSignal=SIGTERM
+TimeoutStopSec=30
+Restart=always
+RestartSec=5
+StartLimitInterval=60
+StartLimitBurst=3
+
+# 安全設定
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/go-auto-deploy/data /opt/go-auto-deploy/logs
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+
+# 資源限制
+LimitNOFILE=65536
+LimitNPROC=4096
+
+# 環境變數
+Environment=GIN_MODE=release
+Environment=GO_ENV=production
+
+# 日誌設定
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=go-auto-deploy
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,48 @@
+server:
+  port: 3020
+  host: "0.0.0.0"
+
+webhook:
+  secret: "qwedsa8898"
+  path: "/webhook"
+
+database:
+  path: "./data/deploys.db"
+
+logging:
+  level: "info"
+  file: "./logs/deploy.log"
+
+deployments:
+  - name: "my-app"
+    repository: "username/my-app"
+    branch: "main"
+    work_dir: "/var/www/my-app"
+    commands:
+      - "git pull origin main"
+      - "npm install"
+      - "npm run build"
+      - "./scripts/restart.sh"
+    
+  - name: "api-server"
+    repository: "username/api-server"
+    branch: "production"
+    work_dir: "/var/www/api-server"
+    commands:
+      - "git pull origin production"
+      - "go mod tidy"
+      - "go build -o api-server"
+      - "systemctl restart api-server"
+
+notifications:
+  webhook:
+    enabled: true
+    url: "https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK"
+  
+  email:
+    enabled: false
+    smtp_host: "smtp.gmail.com"
+    smtp_port: 587
+    username: "your-email@gmail.com"
+    password: "your-app-password"
+    to: ["admin@company.com"]
