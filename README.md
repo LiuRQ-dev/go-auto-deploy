@@ -79,4 +79,4 @@ make lint         # Lint check
 
 ## License
 
-MIT License
+MPL 2.0
