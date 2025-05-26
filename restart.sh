@@ -126,13 +126,13 @@ else
     exit 1
 fi
 
-# 健康檢查 (如果有提供健康檢查端點)
+
 if [[ -n "$HEALTH_CHECK_URL" ]]; then
     log "執行健康檢查: $HEALTH_CHECK_URL"
     
     for i in {1..5}; do
         if curl -s -f "$HEALTH_CHECK_URL" > /dev/null; then
-            log "✅ 健康檢查通過"
+            log "健康檢查通過"
             break
         else
             log "健康檢查未通過，等待... ($i/5)"
